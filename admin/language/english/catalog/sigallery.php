@@ -33,6 +33,8 @@ $_['entry_height']             = 'Height:';
 $_['entry_autoplay']           = 'Autoplay (ms):';
 $_['entry_parent']             = 'Parent:';
 $_['button_add_gallimage']     = 'Add image';
+$_['entry_width_popup']        = 'Images width popup:';
+$_['entry_height_popup']       = 'Images height popup:';
 
 // Tabs
 $_['tab_general']              = 'Description';

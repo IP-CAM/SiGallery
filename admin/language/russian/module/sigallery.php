@@ -12,15 +12,15 @@ $_['text_module_menu']    = 'в виде меню галерей';
 $_['text_module_image']   = 'изображения из выбранной галереи';
 
 // Entry
-$_['entry_gallimage']     = 'Галерея:';
 $_['entry_width']         = 'Ширина:';
 $_['entry_height']        = 'Высота:';
 $_['entry_name']          = 'Название:';
 $_['entry_module_type']   = 'Тип модуля:';
 $_['entry_status']        = 'Статус:';
 $_['entry_sort_order']    = 'Сортировка:';
+$_['entry_sigallery']     = 'Галерея:';
 
 // Error
 $_['error_permission']    = 'Внимание: У вас не достаточно прав для внесения изменений в галерею!';
-$_['error_dimension']     = 'Ширина &amp; Высота требуемых размеров!';
+$_['error_dimension']     = 'Не верно указана ширина и высота!';
 ?>
