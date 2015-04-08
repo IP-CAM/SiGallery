@@ -47,11 +47,12 @@
 				<?php } ?>
 				</div>
 			<?php } else { ?>
-				<?php foreach ($sigallerys as $sigallery) { ?>
-						<div>
+				<?php if ($sigallerys) { ?>
+					<div class="row">
+					<?php foreach ($sigallerys as $sigallery) { ?>
 						<?php if ($sigallery['link']) { ?>
 						<div class="col-xs-6 col-md-3">
-							<a href="<?php echo $sigallery['popup']; ?>" title="<?php echo $sigallery['title']; ?>" class="magni">
+							<a href="<?php echo $sigallery['link']; ?>" title="<?php echo $sigallery['title']; ?>" class="magni">
 								<img src="<?php echo $sigallery['image']; ?>" alt="<?php echo $sigallery['title']; ?>" title="<?php echo $sigallery['title']; ?>" class="thumbnail"/>
 							</a>
 						</div>
@@ -62,8 +63,9 @@
 							</a>
 						</div>
 						<?php } ?>
-						</div>
-					  <?php } ?>
+					<?php } ?>
+					</div>
+				<?php } ?>
 			<?php } ?>
 			<?php echo $description_after; ?>
 			<script type="text/javascript"><!--
