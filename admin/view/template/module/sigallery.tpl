@@ -36,7 +36,7 @@
 						<label class="col-sm-2 control-label" for="module-type"><?php echo $entry_module_type; ?></label>
 						<div class="col-sm-10">
 							<select name="module_type" class="form-control" id="module-type">
-								<?php if ($sigallery['module_type'] == $module_type) { ?>
+								<?php if ($module_type) { ?>
 								<option value="0"><?php echo $text_module_menu; ?></option>
 								<option value="1" selected="selected"><?php echo $text_module_image; ?></option>
 								<?php } else { ?>
