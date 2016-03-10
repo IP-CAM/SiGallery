@@ -131,8 +131,7 @@ class ControllerModuleSigallery extends Controller {
 		$data['layouts'] = $this->model_design_layout->getLayouts();
 
 		$this->load->model('catalog/sigallery');
-
-		$data['sigallerys'] = $this->model_catalog_sigallery->getsigallerys();
+		$data['sigallerys'] = $this->model_catalog_sigallery->getSigallerys();
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');

@@ -36,7 +36,7 @@
 					<div class="tab-pane active" id="tab-general">
 						<ul class="nav nav-tabs" id="language">
 							<?php foreach ($languages as $language) { ?>
-							<li><a href="#language<?php echo $language['language_id']; ?>" data-toggle="tab"><img src="view/image/flags/<?php echo $language['image']; ?>" title="<?php echo $language['name']; ?>" /> <?php echo $language['name']; ?></a></li>
+							<li><a href="#language<?php echo $language['language_id']; ?>" data-toggle="tab"><img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" title="<?php echo $language['name']; ?>" /> <?php echo $language['name']; ?></a></li>
 							<?php } ?>
 						</ul>
 						<div class="tab-content">
@@ -128,7 +128,7 @@
 							<tbody id="image-row<?php echo $image_row; ?>">
 								<tr>
 									<td class="text-left"><?php foreach ($languages as $language) { ?>
-										<div class="input-group col-md-6"><span class="input-group-addon"><img src="view/image/flags/<?php echo $language['image']; ?>" title="<?php echo $language['name']; ?>" /></span>
+										<div class="input-group col-md-6"><span class="input-group-addon"><img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" title="<?php echo $language['name']; ?>" /></span>
 										<input type="text" class="form-control" name="sigallery_image[<?php echo $image_row; ?>][sigallery_image_description][<?php echo $language['language_id']; ?>][title]" value="<?php echo isset($sigallery_image['sigallery_image_description'][$language['language_id']]) ? $sigallery_image['sigallery_image_description'][$language['language_id']]['title'] : ''; ?>" />
 										<?php if (isset($error_sigallery_image[$image_row][$language['language_id']])) { ?>
 										<span class="error"><?php echo $error_sigallery_image[$image_row][$language['language_id']]; ?></span>
@@ -298,7 +298,7 @@ function addImage() {
 	html += '<tr>';
 	html += '<td class="text-left">';
 	<?php foreach ($languages as $language) { ?>
-		html += '<div class="input-group col-md-6"><span class="input-group-addon"><img src="view/image/flags/<?php echo $language['image']; ?>" title="<?php echo $language['name']; ?>" /></span><input type="text" class="form-control" name="sigallery_image[' + image_row + '][sigallery_image_description][<?php echo $language['language_id']; ?>][title]" value="" /></div>';
+		html += '<div class="input-group col-md-6"><span class="input-group-addon"><img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" title="<?php echo $language['name']; ?>" /></span><input type="text" class="form-control" name="sigallery_image[' + image_row + '][sigallery_image_description][<?php echo $language['language_id']; ?>][title]" value="" /></div>';
 	<?php } ?>
 	html += '</td>';	
 	html += '<td class="text-left"><input type="text" class="form-control" name="sigallery_image[' + image_row + '][link]" value="" /></td>';	

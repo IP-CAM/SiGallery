@@ -197,11 +197,12 @@ public function index() {
 		$data['footer'] = $this->load->controller('common/footer');
 		$data['header'] = $this->load->controller('common/header');
 
-		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/information/sigallery.tpl')) {
+		/*if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/information/sigallery.tpl')) {
 			$this->response->setOutput($this->load->view($this->config->get('config_template') . '/template/information/sigallery.tpl', $data));
 		} else {
 			$this->response->setOutput($this->load->view('default/template/information/sigallery.tpl', $data));
-		}
+		}*/
+		$this->response->setOutput($this->load->view('information/sigallery', $data));
 	}
 }
 ?>

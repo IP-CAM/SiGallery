@@ -2,8 +2,6 @@
 class ControllerModuleSigallery extends Controller {
 	public function index($setting) {
 		$this->language->load('module/sigallery'); 
-
-		//$data['heading_title'] = $this->language->get('heading_title');
 		$data['heading_title'] = $setting['name'];
 
 		$this->load->model('catalog/sigallery');
@@ -70,12 +68,7 @@ class ControllerModuleSigallery extends Controller {
 				);
 			}
 		}
-
-		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/module/sigallery.tpl')) {
-			return $this->load->view($this->config->get('config_template') . '/template/module/sigallery.tpl', $data);
-		} else {
-			return $this->load->view('default/template/module/sigallery.tpl', $data);
-		}
+		return $this->load->view('module/sigallery', $data);
 	}
 }
 ?>
