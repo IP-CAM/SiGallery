@@ -33,7 +33,7 @@ $_['entry_width_popup']        = 'Ширина всплывающего изоб
 $_['entry_height_popup']       = 'Высота всплывающего изображения:';
 $_['entry_autoplay']           = 'Автопрокрутка (ms):';
 $_['entry_parent']             = 'Родительская галерея:';
-
+$_['entry_gallery_image']      = 'Изображение галереи';
 // Buttons
 $_['button_add_gallimage']     = 'Добавить изображение';
 $_['button_remove']            = 'Удалить изображение';

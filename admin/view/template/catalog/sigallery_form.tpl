@@ -114,6 +114,25 @@
 						</div>
 					</div>
 					<div class="tab-pane" id="tab-images">
+						<div class="table-responsive">
+							<table class="table table-striped table-bordered table-hover">
+							<thead>
+							<tr>
+							<td class="text-left"><?php echo $entry_gallery_image; ?></td>
+							</tr>
+							</thead>
+							<tbody>
+							<tr>
+							<td class="text-left">
+								<a href="" id="thumb-image" data-toggle="image" class="img-thumbnail" data-original-title="" title="">
+								<img src="<?php echo $thumb; ?>" alt="" title="" data-placeholder="<?php echo $thumb; ?>"></a>
+								<input type="hidden" name="sigallery-one-image" value="<?php echo $gallery_image; ?>" id="input-image">
+							</td>
+							</tr>
+							</tbody>
+							</table>
+						</div>
+
 						<table id="images" class="table table-bordered">
 							<thead>
 								<tr>
@@ -165,6 +184,7 @@
 						</table>
 					</div>
 					<div class="tab-pane" id="tab-data">
+
 						<div class="form-group">
 							<label class="col-sm-2 control-label" for="input-keyword"><span data-toggle="tooltip" title="<?php echo $help_keyword; ?>"><?php echo $entry_keyword; ?></span></label>
 							<div class="col-sm-10">

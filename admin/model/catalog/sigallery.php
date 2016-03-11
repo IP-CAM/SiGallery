@@ -12,7 +12,9 @@ class ModelCatalogSigallery extends Model {
 			`type` = '" . (int)$data['type'] . "', 
 			`autoplay` = '" . (int)$data['autoplay'] . "', 
 			`parent` = '" . (int)$data['parent'] . "', 
-			`status` = '" . (int)$data['status'] . "';");
+			`status` = '" . (int)$data['status'] . "',
+			`gallery_image` = '" . $this->db->escape($data['sigallery-one-image']) . "'
+			;");
 
 		$sigallery_id = $this->db->getLastId();
 
@@ -60,7 +62,9 @@ class ModelCatalogSigallery extends Model {
 			`type` = '" . (int)$data['type'] . "', 
 			`autoplay` = '" . (int)$data['autoplay'] . "', 
 			`parent` = '" . (int)$data['parent'] . "', 
-			`status` = '" . (int)$data['status'] . "' WHERE `sigallery_id` = '" . (int)$sigallery_id . "'");
+			`status` = '" . (int)$data['status'] . "',
+			`gallery_image` = '" . $this->db->escape($data['sigallery-one-image']) . "'
+		 WHERE `sigallery_id` = '" . (int)$sigallery_id . "'");
 
 		foreach ($data['sigallery_description'] as $key => $value) {
 			$this->db->query("UPDATE `" . DB_PREFIX . "sigallery_description` SET 

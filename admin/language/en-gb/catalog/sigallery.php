@@ -35,7 +35,7 @@ $_['entry_parent']             = 'Parent:';
 $_['button_add_gallimage']     = 'Add image';
 $_['entry_width_popup']        = 'Images width popup:';
 $_['entry_height_popup']       = 'Images height popup:';
-
+$_['entry_gallery_image']      = 'Gallery image';
 // Tabs
 $_['tab_general']              = 'Description';
 $_['tab_images']               = 'Images';

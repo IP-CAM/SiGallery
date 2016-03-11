@@ -297,6 +297,7 @@ class ControllerCatalogSigallery extends Controller {
 		$data['entry_autoplay'] = $this->language->get('entry_autoplay');
 		$data['entry_type'] = $this->language->get('entry_type');
 		$data['entry_parent'] = $this->language->get('entry_parent');
+		$data['entry_gallery_image'] = $this->language->get('entry_gallery_image');
 
 		$data['type_fade'] = $this->language->get('type_fade');
 		$data['type_single'] = $this->language->get('type_single');
@@ -378,7 +379,6 @@ class ControllerCatalogSigallery extends Controller {
 		else
 		{
 			$sigallery_info=array();
-			//$parents=array();
 		}
 		$filter_data=array('sort'  => 'sort_order');
 		$parents = $this->model_catalog_sigallery->getSigallerys($filter_data);
@@ -480,6 +480,33 @@ class ControllerCatalogSigallery extends Controller {
 		$data['languages'] = $this->model_localisation_language->getLanguages();
 
 		$this->load->model('tool/image');
+
+
+
+
+
+
+		if (isset($this->request->post['sigallery-one-image'])) {
+			$data['gallery_image'] = $this->request->post['sigallery-one-image'];
+		} elseif (!empty($sigallery_info)) {
+			$data['gallery_image'] = $sigallery_info['gallery_image'];
+		} else {
+			$data['gallery_image'] = '';
+		}
+
+		if (isset($this->request->post['sigallery-one-image']) && is_file(DIR_IMAGE . $this->request->post['sigallery-one-image'])) {
+			$data['thumb'] = $this->model_tool_image->resize($this->request->post['sigallery-one-image'], 100, 100);
+		} elseif (!empty($sigallery_info) && is_file(DIR_IMAGE . $sigallery_info['gallery_image'])) {
+			$data['thumb'] = $this->model_tool_image->resize($sigallery_info['gallery_image'], 100, 100);
+		} else {
+			$data['thumb'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+		}
+
+
+
+
+
+
 
 		if (isset($this->request->post['sigallery_image'])) {
 			$sigallery_images = $this->request->post['sigallery_image'];
