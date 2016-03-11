@@ -151,6 +151,7 @@ class ControllerModuleSigallery extends Controller {
   `height_popup` int(11) NOT NULL,
   `autoplay` int(4) NOT NULL,
   `type` tinyint(4) NOT NULL,
+  `gallery_image` tinytext NOT NULL,
   PRIMARY KEY (`sigallery_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
         $this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "sigallery_description` (
@@ -179,6 +180,10 @@ class ControllerModuleSigallery extends Controller {
   `title` varchar(64) NOT NULL,
   PRIMARY KEY (`sigallery_image_id`,`language_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+		$this->db->query("INSERT INTO `" . DB_PREFIX . "sigallery` (`sigallery_id`, `status`, `sort_order`, `parent`, `width`, `height`, `width_popup`, `height_popup`, `autoplay`, `type`, `gallery_image`) VALUES
+(1, 1, 1, 0, 200, 200, 0, 0, 0, 1, '');");
+		$this->db->query("INSERT INTO `" . DB_PREFIX . "sigallery_description` (`sigallery_id`, `language_id`, `title`, `description`, `description_after`, `meta_title`, `meta_description`, `meta_keyword`) VALUES
+(1, 1, 'root', '', '', '', '', '');")
     }
 	
 	public function uninstall() {
