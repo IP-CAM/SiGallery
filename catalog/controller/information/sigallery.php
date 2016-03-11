@@ -30,7 +30,7 @@ public function index() {
 			$data['gallery_id'] = $parts[0];
 			$gallery_query = $parts[0];
 		} else {
-			$data['gallery_id'] = 0;
+			$data['gallery_id'] = 1;
 		}
 
 		if (isset($parts[1])) {
@@ -64,9 +64,15 @@ public function index() {
 		$results = $this->model_catalog_sigallery->getSigallery($gallery_query);
 
 		foreach ($results['childrens'] as $children) {
+			if (empty($children['gallery_image'])) {
+				$thumb=$this->model_tool_image->resize('no_image.png', $results['settings'][0]['width'], $results['settings'][0]['height']);
+			} else {
+				$thumb=$this->model_tool_image->resize($children['gallery_image'], $results['settings'][0]['width'], $results['settings'][0]['height']);
+			}
 			$data['childrens'][]=array(
 				'title' => $children['title'],
 				'gallery_id' => $children['gallery'],
+				'thumb' => $thumb,
 				'href' => $this->url->link('information/sigallery', 'path_gallery=' . $this->request->get['path_gallery'] . '_' . $children['gallery'])
 				);
 		}
@@ -197,11 +203,6 @@ public function index() {
 		$data['footer'] = $this->load->controller('common/footer');
 		$data['header'] = $this->load->controller('common/header');
 
-		/*if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/information/sigallery.tpl')) {
-			$this->response->setOutput($this->load->view($this->config->get('config_template') . '/template/information/sigallery.tpl', $data));
-		} else {
-			$this->response->setOutput($this->load->view('default/template/information/sigallery.tpl', $data));
-		}*/
 		$this->response->setOutput($this->load->view('information/sigallery', $data));
 	}
 }
