@@ -40,6 +40,7 @@ class ControllerModuleSigallery extends Controller {
 		$data['button_cancel'] = $this->language->get('button_cancel');
 		$data['button_add_module'] = $this->language->get('button_add_module');
 		$data['button_remove'] = $this->language->get('button_remove');
+		$data['button_manage_gallery'] = $this->language->get('button_manage_gallery');
 
 		if (isset($this->error['warning'])) {
 			$data['error_warning'] = $this->error['warning'];
@@ -52,6 +53,7 @@ class ControllerModuleSigallery extends Controller {
 		} else {
 			$data['error_dimension'] = false;
 		}
+		$data['manage_gallery'] = $this->url->link('catalog/sigallery', 'token=' . $this->session->data['token'], 'SSL');
 
 		$data['breadcrumbs'] = array();
 
@@ -123,7 +125,7 @@ class ControllerModuleSigallery extends Controller {
 		} elseif (!empty($module_info)) {
 			$data['module_type'] = $module_info['module_type'];
 		} else {
-			$data['module_type'] = '';
+			$data['module_type'] = 0;
 		}
 
 		$this->load->model('design/layout');

@@ -93,6 +93,9 @@
 							</select>
 						</div>
 					</div>
+					<div class="form-group text-center">
+						<a href="<?php echo $manage_gallery; ?>" class="btn btn-primary"><?php echo $button_manage_gallery; ?></a>
+					</div>
 				</div>
 			</div>
 		</div>
