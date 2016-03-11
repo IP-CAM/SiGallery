@@ -55,6 +55,7 @@ $_['text_parent']              = '- root -';
 $_['error_permission']         = 'Warning: У вас не достаточно прав для внесения изменений в галерею!';
 $_['error_name']               = 'Gallery name must contain between 3 and 64 characters!';
 $_['error_title']              = 'Title name must contain between 3 and 64 characters!';
+$_['error_root']               = 'Root category can not be deleted!';
 $_['error_keyword']            = 'SEO URL must contain between 3 and 64 characters!';
 $_['error_default']            = 'Warning: Этот слой невозможно удалить, так как он является слоем по усолчанию!';
 $_['error_product']            = 'Warning: Этот слой невозможно удалить, так как он связан с %s продуктами!';

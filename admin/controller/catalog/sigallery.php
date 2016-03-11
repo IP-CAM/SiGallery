@@ -83,7 +83,7 @@ class ControllerCatalogSigallery extends Controller {
 
 		$this->load->model('catalog/sigallery');
 
-		if (isset($this->request->post['selected']) && $this->validateDelete()) {
+		if (isset($this->request->post['selected']) && $this->validateDelete($this->request->post['selected'])) {
 			foreach ($this->request->post['selected'] as $sigallery_id) {
 				$check = $this->parentValidateDelete($sigallery_id);
 				if ($check)
@@ -483,9 +483,6 @@ class ControllerCatalogSigallery extends Controller {
 
 
 
-
-
-
 		if (isset($this->request->post['sigallery-one-image'])) {
 			$data['gallery_image'] = $this->request->post['sigallery-one-image'];
 		} elseif (!empty($sigallery_info)) {
@@ -501,9 +498,6 @@ class ControllerCatalogSigallery extends Controller {
 		} else {
 			$data['thumb'] = $this->model_tool_image->resize('no_image.png', 100, 100);
 		}
-
-
-
 
 
 
@@ -585,7 +579,11 @@ class ControllerCatalogSigallery extends Controller {
 		}
 	}
 
-	protected function validateDelete() {
+	protected function validateDelete($array) {
+		if (in_array(1, $array)) {
+			$this->error['warning'] = $this->language->get('error_root');
+			return false;
+		}
 		if (!$this->user->hasPermission('modify', 'catalog/sigallery')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
