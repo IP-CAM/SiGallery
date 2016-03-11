@@ -183,7 +183,7 @@ class ControllerModuleSigallery extends Controller {
 		$this->db->query("INSERT INTO `" . DB_PREFIX . "sigallery` (`sigallery_id`, `status`, `sort_order`, `parent`, `width`, `height`, `width_popup`, `height_popup`, `autoplay`, `type`, `gallery_image`) VALUES
 (1, 1, 1, 0, 200, 200, 0, 0, 0, 1, '');");
 		$this->db->query("INSERT INTO `" . DB_PREFIX . "sigallery_description` (`sigallery_id`, `language_id`, `title`, `description`, `description_after`, `meta_title`, `meta_description`, `meta_keyword`) VALUES
-(1, 1, 'root', '', '', '', '', '');")
+(1, 1, 'root', '', '', '', '', '');");
     }
 	
 	public function uninstall() {
