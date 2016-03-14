@@ -202,6 +202,7 @@ class ControllerCatalogSigallery extends Controller {
 		$data['column_action'] = $this->language->get('column_action');
 
 		$data['button_add'] = $this->language->get('button_add');
+		$data['button_edit'] = $this->language->get('button_edit');
 		$data['button_delete'] = $this->language->get('button_delete');
 
 		if (isset($this->error['warning'])) {
@@ -271,7 +272,6 @@ class ControllerCatalogSigallery extends Controller {
 		$data['text_browse'] = $this->language->get('text_browse');
 		$data['text_clear'] = $this->language->get('text_clear');
 		$data['text_list'] = $this->language->get('text_list');
-		$data['text_parent'] = $this->language->get('text_parent');
 
 		$data['tab_general'] = $this->language->get('tab_general');
 		$data['tab_images'] = $this->language->get('tab_images');
@@ -481,15 +481,10 @@ class ControllerCatalogSigallery extends Controller {
 
 		$this->load->model('tool/image');
 
-
-
-		if (isset($this->request->post['sigallery-one-image'])) {
-			$data['gallery_image'] = $this->request->post['sigallery-one-image'];
-		} elseif (!empty($sigallery_info)) {
+		if ($sigallery_info['gallery_image'] != '')
 			$data['gallery_image'] = $sigallery_info['gallery_image'];
-		} else {
-			$data['gallery_image'] = '';
-		}
+		else
+			$data['gallery_image'] = 'no_image.png';
 
 		if (isset($this->request->post['sigallery-one-image']) && is_file(DIR_IMAGE . $this->request->post['sigallery-one-image'])) {
 			$data['thumb'] = $this->model_tool_image->resize($this->request->post['sigallery-one-image'], 100, 100);
@@ -498,9 +493,6 @@ class ControllerCatalogSigallery extends Controller {
 		} else {
 			$data['thumb'] = $this->model_tool_image->resize('no_image.png', 100, 100);
 		}
-
-
-
 
 		if (isset($this->request->post['sigallery_image'])) {
 			$sigallery_images = $this->request->post['sigallery_image'];
