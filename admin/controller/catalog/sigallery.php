@@ -246,7 +246,7 @@ class ControllerCatalogSigallery extends Controller {
 		$pagination = new Pagination();
 		$pagination->total = $sigallery_total;
 		$pagination->page = $page;
-		$pagination->limit = $this->config->get('config_admin_limit');
+		$pagination->limit = $this->config->get('config_limit_admin');
 		$pagination->text = $this->language->get('text_pagination');
 		$pagination->url = $this->url->link('catalog/sigallery', 'token=' . $this->session->data['token'] . $url . '&page={page}', 'SSL');
 
