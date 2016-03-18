@@ -91,7 +91,6 @@
 								<label class="col-sm-2 control-label" for="parent"><?php echo $entry_parent; ?></label>
 								<div class="col-sm-10">
 									<select name="parent" id="parent" class="form-control">
-										<option value="0"><?php echo $text_parent; ?></option>
 										<?php foreach ($parents[0]['children'] as $value) { 
 											$selected=($value['id']==$parent)?"selected":"";
 											echo '<option '.$selected.' value="'.$value['id'].'">'.$value['title'].'</option>';
@@ -160,13 +159,13 @@
 									<td class="text-left">
 											<div class="col-sm-10">
 												<a href="" id="thumb-image<?php echo $image_row; ?>" data-toggle="image" class="img-imagenail">
-													<img src="<?php echo $sigallery_image['thumb']; ?>" alt="" title="" data-placeholder="<?php echo $placeholder; ?>" id="image<?php echo $image_row; ?>"/>
+													<img src="<?php echo $sigallery_image['thumb']; ?>" alt="" title="" id="image<?php echo $image_row; ?>"/>
 												</a>
 												<input type="hidden" name="sigallery_image[<?php echo $image_row; ?>][image]" value="<?php echo $sigallery_image['image']; ?>" id="input-image<?php echo $image_row; ?>" />
 											</div>
 										</td>
 									<td class="text-left">
-										<button type="button" onclick="$('#image-row<?php echo $image_row; ?>').remove();" data-toggle="tooltip" title="<?php echo $button_remove; ?>" class="btn btn-danger" data-original-title="<?php echo $text_remove; ?>"><i class="fa fa-minus-circle"></i></button>
+										<button type="button" onclick="$('#image-row<?php echo $image_row; ?>').remove();" data-toggle="tooltip" title="<?php echo $button_remove; ?>" class="btn btn-danger" data-original-title="<?php echo $button_remove; ?>"><i class="fa fa-minus-circle"></i></button>
 									</td>
 								</tr>
 							</tbody>
@@ -323,9 +322,9 @@ function addImage() {
 	html += '</td>';	
 	html += '<td class="text-left"><input type="text" class="form-control" name="sigallery_image[' + image_row + '][link]" value="" /></td>';	
 	html += '<td class="text-left">'+
-	'<div class="col-sm-10"> <a href="" id="thumb-image' + image_row + '" data-toggle="image" class="img-imagenail"><img src="<?php echo $no_image; ?>" alt="" title="" id="image' + image_row + '"/></a><input type="hidden" name="sigallery_image[' + image_row + '][image]" value="<?php echo $image; ?>" id="input-image' + image_row + '" /></div>';
+	'<div class="col-sm-10"> <a href="" id="thumb-image' + image_row + '" data-toggle="image" class="img-imagenail"><img src="<?php echo $no_image; ?>" alt="" title="" id="image' + image_row + '"/></a><input type="hidden" name="sigallery_image[' + image_row + '][image]" value="<?php echo $no_image; ?>" id="input-image' + image_row + '" /></div>';
 	html += '<td class="text-left">'+
-	'<button type="button" onclick="$(\'#image-row' + image_row  + '\').remove();" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="<?php echo $text_remove; ?>"><i class="fa fa-minus-circle"></i></button>'+
+	'<button type="button" onclick="$(\'#image-row' + image_row  + '\').remove();" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="<?php echo $button_remove; ?>"><i class="fa fa-minus-circle"></i></button>'+
 	'</td>';
 	html += '</tr>';
 	html += '</tbody>'; 
