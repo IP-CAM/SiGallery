@@ -184,11 +184,19 @@ class ControllerCatalogSigallery extends Controller {
 
 			$data['sigallerys'][] = array(
 				'sigallery_id' => $result['sigallery_id'],
-				'name'      => $result['title'],	
-				'status'    => ($result['status'] ? $this->language->get('text_enabled') : $this->language->get('text_disabled')),				
-				'selected'  => isset($this->request->post['selected']) && in_array($result['sigallery_id'], $this->request->post['selected']),				
+				'name'      => $result['title'],
+				'status'    => ($result['status'] ? $this->language->get('text_enabled') : $this->language->get('text_disabled')),
+				'selected'  => isset($this->request->post['selected']) && in_array($result['sigallery_id'], $this->request->post['selected']),
+				'order'     => $result['sort_order'],
+				'parent'    => $result['parent'],
 				'action'    => $action
 			);
+		}
+
+		$results = $this->model_catalog_sigallery->getAllSigallerys();
+		$data['parents'][0] = '';
+		foreach ($results as $result) {
+			$data['parents'][$result['sigallery_id']] = $result['title'].' > ';
 		}
 
 		$data['heading_title'] = $this->language->get('heading_title');
@@ -200,6 +208,7 @@ class ControllerCatalogSigallery extends Controller {
 		$data['column_name'] = $this->language->get('column_name');
 		$data['column_status'] = $this->language->get('column_status');
 		$data['column_action'] = $this->language->get('column_action');
+		$data['column_sort_order'] = $this->language->get('entry_sort_order');
 
 		$data['button_add'] = $this->language->get('button_add');
 		$data['button_edit'] = $this->language->get('button_edit');
@@ -481,7 +490,7 @@ class ControllerCatalogSigallery extends Controller {
 
 		$this->load->model('tool/image');
 
-		if ($sigallery_info['gallery_image'] != '')
+		if (isset($sigallery_info['gallery_image']))
 			$data['gallery_image'] = $sigallery_info['gallery_image'];
 		else
 			$data['gallery_image'] = 'no_image.png';
