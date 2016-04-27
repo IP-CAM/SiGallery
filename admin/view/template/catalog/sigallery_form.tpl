@@ -88,26 +88,10 @@
 							</div>
 							<?php } ?>
 							<div class="form-group">
-								<label class="col-sm-2 control-label" for="parent"><?php echo $entry_parent; ?></label>
+								<label class="col-sm-2 control-label" for="input-parent"><?php echo $entry_parent; ?></label>
 								<div class="col-sm-10">
-									<select name="parent" id="parent" class="form-control">
-										<?php foreach ($parents[0]['children'] as $value) { 
-											$selected=($value['id']==$parent)?"selected":"";
-											echo '<option '.$selected.' value="'.$value['id'].'">'.$value['title'].'</option>';
-											if (isset($parents[$value['id']])) {
-												foreach ($parents[$value['id']]['children'] as $child2) {
-													$selected=($child2['id']==$parent)?"selected":"";
-													echo '<option '.$selected.' value="'.$child2['id'].'"> - '.$child2['title'].'</option>';
-													if (isset($parents[$child2['id']])) {
-														foreach ($parents[$child2['id']]['children'] as $child3) {
-															$selected=($child3['id']==$parent)?"selected":"";
-															echo '<option '.$selected.' value="'.$child3['id'].'" disabled> -- '.$child3['title'].'</option>';
-														}
-													}
-												}
-											}
-										 } ?>
-									</select>
+									<input type="text" name="path" value="<?php echo $path; ?>" placeholder="<?php echo $entry_parent; ?>" id="input-parent" class="form-control" autocomplete="off">
+									<input type="hidden" name="parent" value="<?php echo $parent; ?>">
 								</div>
 							</div>
 						</div>
@@ -297,6 +281,32 @@
 	</div>
 </div>
 <script type="text/javascript"><!--
+$('input[name=\'path\']').autocomplete({
+	'source': function(request, response) {
+		$.ajax({
+			url: 'index.php?route=catalog/sigallery/autocomplete&token=<?php echo $token; ?>&filter_name=' +  encodeURIComponent(request),
+			dataType: 'json',
+			success: function(json) {
+				json.unshift({
+					category_id: 0,
+					name: '<?php echo $text_no_results; ?>'
+				});
+
+				response($.map(json, function(item) {
+					return {
+						label: item['name'],
+						value: item['sigallery_id']
+					}
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+		$('input[name=\'path\']').val(item['label']);
+		$('input[name=\'parent\']').val(item['value']);
+	}
+});
+
 <?php foreach ($languages as $language) { ?>
 $('#input-description<?php echo $language['language_id']; ?>').summernote({
 	height: 300
@@ -305,11 +315,9 @@ $('#input-description-after<?php echo $language['language_id']; ?>').summernote(
 	height: 300
 });
 <?php } ?>
-//--></script> 
-  <script type="text/javascript"><!--
+
 $('#language a:first').tab('show');
-//--></script>
-<script type="text/javascript"><!--
+
 var image_row = <?php echo $image_row; ?>;
 
 function addImage() {

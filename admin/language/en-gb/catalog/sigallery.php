@@ -6,6 +6,8 @@ $_['text_success']             = 'Success: Changes made successfully!';
 $_['text_default']             = 'Default';
 $_['text_image_manager']       = 'Image manager';
 $_['text_list']                = 'list SIGallery';
+$_['text_confirm']             = 'Are you sure you want to delete the gallery?';
+$_['text_no_results']          = '- No data -';
 // Column
 $_['column_name']              = 'Name Gallery';
 $_['column_status']            = 'Status';
@@ -48,8 +50,7 @@ $_['help_keyword']             = 'Replace spaces with sign -. The value of this 
 $_['help_order']               = '-1 to hide';
 $_['help_autoplay']            = '0 - disable autoplay.';
 $_['help_popup']               = '0 - Full size.';
-// Text
-$_['text_confirm']             = 'Are you sure you want to delete the gallery?';
+
 // Error
 $_['error_permission']         = 'Warning: У вас не достаточно прав для внесения изменений в галерею!';
 $_['error_name']               = 'Gallery name must contain between 3 and 64 characters!';

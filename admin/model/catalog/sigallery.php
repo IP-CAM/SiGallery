@@ -124,24 +124,20 @@ class ModelCatalogSigallery extends Model {
 	}
 
 	public function getSigallery($sigallery_id) {
-		$query = $this->db->query("SELECT DISTINCT *, (SELECT `keyword` FROM `" . DB_PREFIX . "url_alias` WHERE `query` = 'sigallery_id=" . (int)$sigallery_id . "') AS `keyword` FROM `" . DB_PREFIX . "sigallery` WHERE `sigallery_id` = '" . (int)$sigallery_id . "'");
+		//$query = $this->db->query("SELECT DISTINCT *, (SELECT `keyword` FROM `" . DB_PREFIX . "url_alias` WHERE `query` = 'sigallery_id=" . (int)$sigallery_id . "') AS `keyword` FROM `" . DB_PREFIX . "sigallery` WHERE `sigallery_id` = '" . (int)$sigallery_id . "'");
+		$query = $this->db->query("SELECT DISTINCT *, (SELECT GROUP_CONCAT(cd1.title ORDER BY level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') FROM " . DB_PREFIX . "sigallery_path cp LEFT JOIN " . DB_PREFIX . "sigallery_description cd1 ON (cp.path_id = cd1.sigallery_id AND cp.sigallery_id != cp.path_id) WHERE cp.sigallery_id = c.sigallery_id AND cd1.language_id = '" . (int)$this->config->get('config_language_id') . "' GROUP BY cp.sigallery_id) AS path, (SELECT DISTINCT keyword FROM " . DB_PREFIX . "url_alias WHERE query = 'sigallery_id=" . (int)$sigallery_id . "') AS keyword FROM " . DB_PREFIX . "sigallery c LEFT JOIN " . DB_PREFIX . "sigallery_description cd2 ON (c.sigallery_id = cd2.sigallery_id) WHERE c.sigallery_id = '" . (int)$sigallery_id . "' AND cd2.language_id = '" . (int)$this->config->get('config_language_id') . "'");
+
 		return $query->row;
 	}
-
-
-
-
-
 
 	public function repairSigallery($parent_id = 0) {
 
 		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "sigallery WHERE parent = '" . (int)$parent_id . "'");
 
 		foreach ($query->rows as $sigallery) {
-			// Delete the path below the current one
+
 			$this->db->query("DELETE FROM `" . DB_PREFIX . "sigallery_path` WHERE sigallery_id = '" . (int)$sigallery['sigallery_id'] . "'");
 
-			// Fix for records with no paths
 			$level = 0;
 
 			$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "sigallery_path` WHERE sigallery_id = '" . (int)$parent_id . "' ORDER BY level ASC");
@@ -158,18 +154,9 @@ class ModelCatalogSigallery extends Model {
 		}
 	}
 
-
-
-
 	public function getSigallerys($data = array()) {
 		$parent_id =0;
-		
 
-
-		/*$sql = "SELECT * 
-		FROM `" . DB_PREFIX . "sigallery` `i` LEFT JOIN `" . DB_PREFIX . "sigallery_description` `id`
-			 ON (`i`.`sigallery_id` = `id`.`sigallery_id`) 
-		WHERE `id`.`language_id` = '" . (int)$this->config->get('config_language_id') . "'";*/
 		$sql = "SELECT 
 			`cp`.`sigallery_id` AS `sigallery_id`, 
 			GROUP_CONCAT(`cd1`.`title` ORDER BY `cp`.`level` SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS `title`, 
@@ -180,10 +167,13 @@ class ModelCatalogSigallery extends Model {
 			ON (cp.path_id = cd1.sigallery_id) LEFT JOIN " . DB_PREFIX . "sigallery_description cd2 
 			ON (cp.sigallery_id = cd2.sigallery_id) 
 		WHERE cd1.language_id = '" . (int)$this->config->get('config_language_id') . "' 
-			AND cd2.language_id = '" . (int)$this->config->get('config_language_id') . "' GROUP BY cp.sigallery_id";
+			AND cd2.language_id = '" . (int)$this->config->get('config_language_id') . "'";
 
+		if (!empty($data['filter_name'])) {
+			$sql .= " AND cd2.title LIKE '" . $this->db->escape($data['filter_name']) . "%'";
+		}
 
-
+		$sql .= " GROUP BY cp.sigallery_id";
 
 		$sort_data = array(
 			'status'
