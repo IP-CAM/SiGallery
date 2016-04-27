@@ -2,7 +2,9 @@
 <div id="content">
 	<div class="page-header">
 		<div class="container-fluid">
-			<div class="pull-right"><a href="<?php echo $add; ?>" data-toggle="tooltip" title="<?php echo $button_add; ?>" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+			<div class="pull-right">
+				<a href="<?php echo $add; ?>" data-toggle="tooltip" title="<?php echo $button_add; ?>" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+				<a href="<?php echo $repair; ?>" data-toggle="tooltip" title="<?php echo $button_repair; ?>" class="btn btn-primary"><i class="fa fa-refresh"></i></a>
 				<button type="button" data-toggle="tooltip" title="<?php echo $button_delete; ?>" class="btn btn-danger" onclick="confirm('<?php echo $text_confirm; ?>') ? $('#form').submit() : false;"><i class="fa fa-trash-o"></i></button>
 			</div>
 			<h1><?php echo $heading_title; ?></h1>
@@ -34,20 +36,22 @@
 						<thead>
 							<tr>
 								<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);" /></td>
-								<td class="left"><?php if ($sort == 'name') { ?>
+								<td class="text-left"><?php if ($sort == 'name') { ?>
 									<a href="<?php echo $sort_name; ?>" class="<?php echo strtolower($order); ?>"><?php echo $column_name; ?></a>
 									<?php } else { ?>
 									<a href="<?php echo $sort_name; ?>"><?php echo $column_name; ?></a>
 									<?php } ?></td>
-								<td class="left"><?php if ($sort == 'status') { ?>
+								<td><?php echo $column_sort_order; ?></td>
+								<td class="text-left"><?php if ($sort == 'status') { ?>
 									<a href="<?php echo $sort_status; ?>" class="<?php echo strtolower($order); ?>"><?php echo $column_status; ?></a>
 									<?php } else { ?>
 									<a href="<?php echo $sort_status; ?>"><?php echo $column_status; ?></a>
 									<?php } ?></td>
-								<td class="right"><?php echo $column_action; ?></td>
+								<td class="text-right"><?php echo $column_action; ?></td>
 							</tr>
 						</thead>
 						<tbody>
+
 							<?php if ($sigallerys) { ?>
 							<?php foreach ($sigallerys as $sigallery) { ?>
 							<tr>
@@ -56,10 +60,11 @@
 									<?php } else { ?>
 									<input type="checkbox" name="selected[]" value="<?php echo $sigallery['sigallery_id']; ?>" />
 									<?php } ?></td>
-								<td class="left"><?php echo $sigallery['name']; ?></td>
-								<td class="left"><?php echo $sigallery['status']; ?></td>
-								<td class="right"><?php foreach ($sigallery['action'] as $action) { ?>
-									<a href="<?php echo $action['href']; ?>" data-toggle="tooltip" title="<?php echo $action['text']; ?>" class="btn btn-primary" data-original-title="<?php echo $action['text']; ?>"><i class="fa fa-pencil"></i></a>
+								<td class="text-left"><?php echo $sigallery['name']; ?></td>
+								<td class="text-center"><?php echo $sigallery['order']; ?></td>
+								<td class="text-center"><?php echo $sigallery['status']; ?></td>
+								<td class="text-right"><?php foreach ($sigallery['action'] as $action) { ?>
+									<a href="<?php echo $action['href']; ?>" data-toggle="tooltip" title="<?php echo $button_edit; ?>" class="btn btn-primary" data-original-title="<?php echo $action['text']; ?>"><i class="fa fa-pencil"></i></a>
 									<?php } ?></td>
 							</tr>
 							<?php } ?>

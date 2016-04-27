@@ -12,6 +12,22 @@ class ControllerCatalogSigallery extends Controller {
 		$this->getList();
 	}
 
+	public function repair() {
+		$this->load->language('catalog/sigallery');
+
+		$this->document->setTitle($this->language->get('heading_title'));
+
+		$this->load->model('catalog/sigallery');
+
+			$this->model_catalog_sigallery->repairSigallery();
+
+			$this->session->data['success'] = $this->language->get('text_success');
+
+			$this->response->redirect($this->url->link('catalog/sigallery', 'token=' . $this->session->data['token'], true));
+
+		$this->getList();
+	}
+
 	public function add() {
 		$this->load->language('catalog/sigallery');
 
@@ -159,6 +175,7 @@ class ControllerCatalogSigallery extends Controller {
 		);
 
 		$data['add'] = $this->url->link('catalog/sigallery/add', 'token=' . $this->session->data['token'] . $url, 'SSL');
+		$data['repair'] = $this->url->link('catalog/sigallery/repair', 'token=' . $this->session->data['token'] . $url, 'SSL');
 		$data['delete'] = $this->url->link('catalog/sigallery/delete', 'token=' . $this->session->data['token'] . $url, 'SSL');
 
 		$data['sigallerys'] = array();
@@ -193,12 +210,6 @@ class ControllerCatalogSigallery extends Controller {
 			);
 		}
 
-		$results = $this->model_catalog_sigallery->getAllSigallerys();
-		$data['parents'][0] = '';
-		foreach ($results as $result) {
-			$data['parents'][$result['sigallery_id']] = $result['title'].' > ';
-		}
-
 		$data['heading_title'] = $this->language->get('heading_title');
 
 		$data['text_no_results'] = $this->language->get('text_no_results');
@@ -211,6 +222,7 @@ class ControllerCatalogSigallery extends Controller {
 		$data['column_sort_order'] = $this->language->get('entry_sort_order');
 
 		$data['button_add'] = $this->language->get('button_add');
+		$data['button_repair'] = $this->language->get('button_repair');
 		$data['button_edit'] = $this->language->get('button_edit');
 		$data['button_delete'] = $this->language->get('button_delete');
 

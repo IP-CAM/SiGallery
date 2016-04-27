@@ -37,6 +37,7 @@ $_['button_remove']            = 'Delete image';
 $_['button_cancel']            = 'Cancel';
 $_['button_save']              = 'Save';
 $_['button_edit']              = 'Edit';
+$_['button_repair']            = 'Repair';
 // Tabs
 $_['tab_general']              = 'Description';
 $_['tab_images']               = 'Images';

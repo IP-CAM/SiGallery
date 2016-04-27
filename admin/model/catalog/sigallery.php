@@ -128,8 +128,63 @@ class ModelCatalogSigallery extends Model {
 		return $query->row;
 	}
 
+
+
+
+
+
+	public function repairSigallery($parent_id = 0) {
+
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "sigallery WHERE parent = '" . (int)$parent_id . "'");
+
+		foreach ($query->rows as $sigallery) {
+			// Delete the path below the current one
+			$this->db->query("DELETE FROM `" . DB_PREFIX . "sigallery_path` WHERE sigallery_id = '" . (int)$sigallery['sigallery_id'] . "'");
+
+			// Fix for records with no paths
+			$level = 0;
+
+			$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "sigallery_path` WHERE sigallery_id = '" . (int)$parent_id . "' ORDER BY level ASC");
+
+			foreach ($query->rows as $result) {
+				$this->db->query("INSERT INTO `" . DB_PREFIX . "sigallery_path` SET sigallery_id = '" . (int)$sigallery['sigallery_id'] . "', `path_id` = '" . (int)$result['path_id'] . "', level = '" . (int)$level . "'");
+
+				$level++;
+			}
+
+			$this->db->query("REPLACE INTO `" . DB_PREFIX . "sigallery_path` SET sigallery_id = '" . (int)$sigallery['sigallery_id'] . "', `path_id` = '" . (int)$sigallery['sigallery_id'] . "', level = '" . (int)$level . "'");
+
+			$this->repairSigallery($sigallery['sigallery_id']);
+		}
+	}
+
+
+
+
 	public function getSigallerys($data = array()) {
-		$sql = "SELECT * FROM `" . DB_PREFIX . "sigallery` `i` LEFT JOIN `" . DB_PREFIX . "sigallery_description` `id` ON (`i`.`sigallery_id` = `id`.`sigallery_id`) WHERE `id`.`language_id` = '" . (int)$this->config->get('config_language_id') . "'";
+		$parent_id =0;
+		
+
+
+		/*$sql = "SELECT * 
+		FROM `" . DB_PREFIX . "sigallery` `i` LEFT JOIN `" . DB_PREFIX . "sigallery_description` `id`
+			 ON (`i`.`sigallery_id` = `id`.`sigallery_id`) 
+		WHERE `id`.`language_id` = '" . (int)$this->config->get('config_language_id') . "'";*/
+		$sql = "SELECT 
+			`cp`.`sigallery_id` AS `sigallery_id`, 
+			GROUP_CONCAT(`cd1`.`title` ORDER BY `cp`.`level` SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS `title`, 
+			`c1`.`parent`, `c1`.`sort_order`, `c1`.`status`
+		FROM " . DB_PREFIX . "sigallery_path cp LEFT JOIN " . DB_PREFIX . "sigallery c1 
+			ON (cp.sigallery_id = c1.sigallery_id) LEFT JOIN " . DB_PREFIX . "sigallery c2 
+			ON (cp.path_id = c2.sigallery_id) LEFT JOIN " . DB_PREFIX . "sigallery_description cd1 
+			ON (cp.path_id = cd1.sigallery_id) LEFT JOIN " . DB_PREFIX . "sigallery_description cd2 
+			ON (cp.sigallery_id = cd2.sigallery_id) 
+		WHERE cd1.language_id = '" . (int)$this->config->get('config_language_id') . "' 
+			AND cd2.language_id = '" . (int)$this->config->get('config_language_id') . "' GROUP BY cp.sigallery_id";
+
+
+
+
 		$sort_data = array(
 			'status'
 		);
@@ -140,7 +195,7 @@ class ModelCatalogSigallery extends Model {
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
 			$sql .= " ORDER BY " . $data['sort'];
 		} else {
-			$sql .= " ORDER BY `sort_order`";
+			$sql .= " ORDER BY `parent`";
 		}
 
 		if (isset($data['order']) && ($data['order'] == 'DESC')) {
@@ -161,9 +216,15 @@ class ModelCatalogSigallery extends Model {
 
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 		}
-
+		//echo $sql;
 		$query = $this->db->query($sql);
 
+		return $query->rows;
+	}
+
+	public function getAllSigallerys() {
+		$sql = "SELECT `i`.`sigallery_id`,`title`,`parent` FROM `" . DB_PREFIX . "sigallery` `i` LEFT JOIN `" . DB_PREFIX . "sigallery_description` `id` ON (`i`.`sigallery_id` = `id`.`sigallery_id`) WHERE `id`.`language_id` = '" . (int)$this->config->get('config_language_id') . "';";
+		$query = $this->db->query($sql);
 		return $query->rows;
 	}
 
@@ -183,8 +244,8 @@ class ModelCatalogSigallery extends Model {
 
 			$sigallery_image_data[] = array(
 				'sigallery_image_description' => $sigallery_image_description_data,
-				'link'                     => $sigallery_image['link'],
-				'image'                    => $sigallery_image['image']
+				'link'                        => $sigallery_image['link'],
+				'image'                       => $sigallery_image['image']
 			);
 		}
 

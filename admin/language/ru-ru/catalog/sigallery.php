@@ -37,6 +37,7 @@ $_['button_remove']            = 'Удалить изображение';
 $_['button_cancel']            = 'Отменить';
 $_['button_save']              = 'Сохранить';
 $_['button_edit']              = 'Изменить';
+$_['button_repair']            = 'Перестроить связи';
 // Tabs
 $_['tab_general']              = 'Описание';
 $_['tab_images']               = 'Изображения';
