@@ -42,6 +42,19 @@ class ModelCatalogSigallery extends Model {
 			}
 		}
 
+		$level = 0;
+
+		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "sigallery_path` WHERE sigallery_id = '" . (int)$data['parent'] . "' ORDER BY `level` ASC");
+
+		foreach ($query->rows as $result) {
+			$this->db->query("INSERT INTO `" . DB_PREFIX . "sigallery_path` SET `sigallery_id` = '" . (int)$sigallery_id . "', `path_id` = '" . (int)$result['path_id'] . "', `level` = '" . (int)$level . "'");
+
+			$level++;
+		}
+
+		$this->db->query("INSERT INTO `" . DB_PREFIX . "sigallery_path` SET `sigallery_id` = '" . (int)$sigallery_id . "', `path_id` = '" . (int)$sigallery_id . "', `level` = '" . (int)$level . "'");
+
+
 		if (isset($data['keyword'])) {
 			$this->db->query("INSERT INTO `" . DB_PREFIX . "url_alias` SET `query` = 'sigallery_id=" . (int)$sigallery_id . "', `keyword` = '" . $this->db->escape($data['keyword']) . "';");
 		}
@@ -92,6 +105,47 @@ class ModelCatalogSigallery extends Model {
 			}
 		}
 
+		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "sigallery_path` WHERE path_id = '" . (int)$sigallery_id . "' ORDER BY level ASC");
+
+				if ($query->rows) {
+					foreach ($query->rows as $sigallery_path) {
+						$this->db->query("DELETE FROM `" . DB_PREFIX . "sigallery_path` WHERE sigallery_id = '" . (int)$sigallery_path['sigallery_id'] . "' AND level < '" . (int)$sigallery_path['level'] . "'");
+						$path = array();
+						$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "sigallery_path` WHERE sigallery_id = '" . (int)$data['parent'] . "' ORDER BY level ASC");
+
+						foreach ($query->rows as $result) {
+							$path[] = $result['path_id'];
+						}
+
+						$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "sigallery_path` WHERE sigallery_id = '" . (int)$sigallery_path['sigallery_id'] . "' ORDER BY level ASC");
+
+						foreach ($query->rows as $result) {
+							$path[] = $result['path_id'];
+						}
+
+						$level = 0;
+
+						foreach ($path as $path_id) {
+							$this->db->query("REPLACE INTO `" . DB_PREFIX . "sigallery_path` SET sigallery_id = '" . (int)$sigallery_path['sigallery_id'] . "', `path_id` = '" . (int)$path_id . "', level = '" . (int)$level . "'");
+
+							$level++;
+						}
+					}
+				} else {
+					$this->db->query("DELETE FROM `" . DB_PREFIX . "sigallery_path` WHERE sigallery_id = '" . (int)$sigallery_id . "'");
+
+					$level = 0;
+
+					$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "sigallery_path` WHERE sigallery_id = '" . (int)$data['parent'] . "' ORDER BY level ASC");
+
+					foreach ($query->rows as $result) {
+						$this->db->query("INSERT INTO `" . DB_PREFIX . "sigallery_path` SET sigallery_id = '" . (int)$sigallery_id . "', `path_id` = '" . (int)$result['path_id'] . "', level = '" . (int)$level . "'");
+						$level++;
+					}
+
+					$this->db->query("REPLACE INTO `" . DB_PREFIX . "sigallery_path` SET sigallery_id = '" . (int)$sigallery_id . "', `path_id` = '" . (int)$sigallery_id . "', level = '" . (int)$level . "'");
+				}
+
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "url_alias` WHERE `query` = 'sigallery_id=" . (int)$sigallery_id . "'");
 
 		if ($data['keyword']) {
@@ -117,6 +171,14 @@ class ModelCatalogSigallery extends Model {
 	}
 
 	public function deleteSigallery($sigallery_id) {
+		$this->db->query("DELETE FROM " . DB_PREFIX . "sigallery_path WHERE sigallery_id = '" . (int)$sigallery_id . "'");
+
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "sigallery_path WHERE path_id = '" . (int)$sigallery_id . "'");
+
+		foreach ($query->rows as $result) {
+			$this->deleteSigallery($result['sigallery_id']);
+		}
+
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "sigallery` WHERE `sigallery_id` = '" . (int)$sigallery_id . "';");
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "sigallery_image` WHERE `sigallery_id` = '" . (int)$sigallery_id . "';");
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "sigallery_image_description` WHERE `sigallery_id` = '" . (int)$sigallery_id . "';");
@@ -124,7 +186,6 @@ class ModelCatalogSigallery extends Model {
 	}
 
 	public function getSigallery($sigallery_id) {
-		//$query = $this->db->query("SELECT DISTINCT *, (SELECT `keyword` FROM `" . DB_PREFIX . "url_alias` WHERE `query` = 'sigallery_id=" . (int)$sigallery_id . "') AS `keyword` FROM `" . DB_PREFIX . "sigallery` WHERE `sigallery_id` = '" . (int)$sigallery_id . "'");
 		$query = $this->db->query("SELECT DISTINCT *, (SELECT GROUP_CONCAT(cd1.title ORDER BY level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') FROM " . DB_PREFIX . "sigallery_path cp LEFT JOIN " . DB_PREFIX . "sigallery_description cd1 ON (cp.path_id = cd1.sigallery_id AND cp.sigallery_id != cp.path_id) WHERE cp.sigallery_id = c.sigallery_id AND cd1.language_id = '" . (int)$this->config->get('config_language_id') . "' GROUP BY cp.sigallery_id) AS path, (SELECT DISTINCT keyword FROM " . DB_PREFIX . "url_alias WHERE query = 'sigallery_id=" . (int)$sigallery_id . "') AS keyword FROM " . DB_PREFIX . "sigallery c LEFT JOIN " . DB_PREFIX . "sigallery_description cd2 ON (c.sigallery_id = cd2.sigallery_id) WHERE c.sigallery_id = '" . (int)$sigallery_id . "' AND cd2.language_id = '" . (int)$this->config->get('config_language_id') . "'");
 
 		return $query->row;
@@ -206,7 +267,6 @@ class ModelCatalogSigallery extends Model {
 
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 		}
-		//echo $sql;
 		$query = $this->db->query($sql);
 
 		return $query->rows;
@@ -248,7 +308,7 @@ class ModelCatalogSigallery extends Model {
 
 		$sigallery_description_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "sigallery_description` WHERE `sigallery_id` = '" . (int)$sigallery_id . "';");
 
-		foreach ($sigallery_description_query->rows as $sigallery_description) {			
+		foreach ($sigallery_description_query->rows as $sigallery_description) {
 			$sigallery_description_data[$sigallery_description['language_id']] = array(
 				'title'                          => $sigallery_description['title'],
 				'meta_title'                     => $sigallery_description['meta_title'],
