@@ -20,48 +20,31 @@ public function index() {
 		$this->document->addStyle('catalog/view/javascript/jquery/slick/slick-theme.css');
 		$this->document->addScript('catalog/view/javascript/jquery/slick/slick.min.js');
 
-		if (isset($this->request->get['path_gallery'])) {
-			$parts = explode('_', (string)$this->request->get['path_gallery']);
-		} else {
-			$parts = array();
-		}
-
-		if (isset($parts[0])) {
-			$data['gallery_id'] = $parts[0];
-			$gallery_query = $parts[0];
-		} else {
-			$data['gallery_id'] = 1;
-		}
-
-		if (isset($parts[1])) {
-			$data['child_id'] = $parts[1];
-			$gallery_query = $parts[1];
-		} else {
-			$data['child_id'] = 0;
-		}
-
 		$path_gallery = '';
-		foreach ($parts as $path_gallery_id) {
+
+		$parts = explode('_', (string)$this->request->get['path_gallery']);
+
+		foreach ($parts as $path_id) {
 			if (!$path_gallery) {
-				$path_gallery = (int)$path_gallery_id;
+				$path_gallery = (int)$path_id;
 			} else {
-				$path_gallery .= '_' . (int)$path_gallery_id;
+				$path_gallery .= '_' . (int)$path_id;
 			}
 
-			$sigallery_info = $this->model_catalog_sigallery->getSigallery($path_gallery_id);
+			$sigallery_info = $this->model_catalog_sigallery->getSigallery($path_id);
 
 			if ($sigallery_info) {
 				$data['breadcrumbs'][] = array(
 					'text' => $sigallery_info['descriptions'][0]['title'],
-					'href' => $this->url->link('information/sigallery', 'path_gallery=' . $path_gallery )
+					'href' => $this->url->link('information/sigallery', 'path_gallery=' . $path_gallery)
 				);
 			}
 		}
 
 		$data['sigallerys'] = array();
-		$gallery_query = (int)array_pop($parts);
+		$sigallery_id = (int)array_pop($parts);
 
-		$results = $this->model_catalog_sigallery->getSigallery($gallery_query);
+		$results = $this->model_catalog_sigallery->getSigallery($sigallery_id);
 
 		foreach ($results['childrens'] as $children) {
 			if (empty($children['gallery_image'])) {
@@ -106,80 +89,80 @@ public function index() {
 		if ($results['settings'][0]['type']==3)
 		{
 			$data['parameters'].='dots: true,
-			  infinite: false,
-			  speed: 300,
-			  dots: true,
-			  slidesToShow: 4,
-			  slidesToScroll: 4,
-			  responsive: [
-			    {
-			      breakpoint: 1024,
-			      settings: {
-			        slidesToShow: 3,
-			        slidesToScroll: 3,
-			        infinite: true,
-			        dots: true
-			      }
-			    },
-			    {
-			      breakpoint: 600,
-			      settings: {
-			        slidesToShow: 2,
-			        slidesToScroll: 2
-			      }
-			    },
-			    {
-			      breakpoint: 480,
-			      settings: {
-			        slidesToShow: 1,
-			        slidesToScroll: 1
-			      }
-			    }
-			  ]});';
+			infinite: false,
+			speed: 300,
+			dots: true,
+			slidesToShow: 4,
+			slidesToScroll: 4,
+			responsive: [
+			{
+				breakpoint: 1024,
+				settings: {
+					slidesToShow: 3,
+					slidesToScroll: 3,
+					infinite: true,
+					dots: true
+				}
+			},
+			{
+				breakpoint: 600,
+				settings: {
+					slidesToShow: 2,
+					slidesToScroll: 2
+				}
+			},
+			{
+				breakpoint: 480,
+				settings: {
+					slidesToShow: 1,
+					slidesToScroll: 1
+				}
+			}
+			]});';
 		}
 		elseif ($results['settings'][0]['type']==4)
 		{
 			$data['parameters'].= "centerMode: true,
-			  centerPadding: '60px',
-			  slidesToShow: 3,
-			  dots: true,
-			  responsive: [
-			    {
-			      breakpoint: 768,
-			      settings: {
-			        arrows: false,
-			        centerMode: true,
-			        centerPadding: '40px',
-			        slidesToShow: 3
-			      }
-			    },
-			    {
-			      breakpoint: 480,
-			      settings: {
-			        arrows: false,
-			        centerMode: true,
-			        centerPadding: '40px',
-			        slidesToShow: 1
-			      }
-			    }
-			  ]});";
+			centerPadding: '60px',
+			slidesToShow: 3,
+			dots: true,
+			responsive: [
+			{
+				breakpoint: 768,
+				settings: {
+					arrows: false,
+					centerMode: true,
+					centerPadding: '40px',
+					slidesToShow: 3
+				}
+			},
+			{
+				breakpoint: 480,
+				settings: {
+					arrows: false,
+					centerMode: true,
+					centerPadding: '40px',
+					slidesToShow: 1
+				}
+			}
+			]});";
 		}
 		elseif ($results['settings'][0]['type']==1)
 		{
 			$data['parameters'].= "
-			  slidesToShow: 3,
-			  slidesToScroll: 1,
-			  asNavFor: '.single-for',
-			  dots: true,
-			  centerMode: true,
-			  focusOnSelect: true
+			slidesToShow: 3,
+			slidesToScroll: 1,
+			asNavFor: '.single-for',
+			dots: true,
+			centerMode: true,
+			focusOnSelect: true
 			});
 			$('.single-for').slick({
-			  slidesToShow: 1,
-			  slidesToScroll: 1,
-			  arrows: false,
-			  fade: true,
-			  asNavFor: '.single-item'
+			slidesToShow: 1,
+			slidesToScroll: 1,
+			arrows: false,
+			fade: true,
+			asNavFor: '.single-item'
 			});";
 		}
 		elseif ($results['settings'][0]['type']==2)

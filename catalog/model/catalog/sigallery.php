@@ -19,7 +19,7 @@ class ModelCatalogSigallery extends Model {
 	}
 
 	public function getSigalleryList($parent=1) {
-				$sigallery_children = $this->db->query("SELECT `title`, `".DB_PREFIX."sigallery`.`sigallery_id` AS `gallery`,  `gallery_image`
+		$sigallery_children = $this->db->query("SELECT `title`, `".DB_PREFIX."sigallery`.`sigallery_id` AS `gallery`,  `gallery_image`
 		FROM `".DB_PREFIX."sigallery_description` LEFT JOIN `".DB_PREFIX."sigallery` ON `".DB_PREFIX."sigallery_description`.`sigallery_id` = `".DB_PREFIX."sigallery`.`sigallery_id` 
 		WHERE  `".DB_PREFIX."sigallery`.`parent`=".$parent." AND `".DB_PREFIX."sigallery_description`.`language_id` = '" . (int)$this->config->get('config_language_id') . "' 
 			AND `".DB_PREFIX."sigallery`.`status`=1 ORDER BY `sort_order` ASC;");
