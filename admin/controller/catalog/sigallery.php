@@ -403,7 +403,6 @@ class ControllerCatalogSigallery extends Controller {
 			$sigallery_info=array();
 		}
 		$filter_data=array('sort'  => 'sort_order');
-		$parents = $this->model_catalog_sigallery->getSigallerys($filter_data);
 
 		if (isset($this->request->post['path'])) {
 			$data['path'] = $this->request->post['path'];
@@ -412,18 +411,6 @@ class ControllerCatalogSigallery extends Controller {
 		} else {
 			$data['path'] = '';
 		}
-
-		$dataset=array();
-		foreach ($parents as $id=>&$node) {
-			if ($node['parent'] === 0) {
-				$tree[$id] = &$node;
-			} else {
-				$dataset[$node['parent']]['children'][$id]['title'] = &$node['title'];
-				$dataset[$node['parent']]['children'][$id]['id'] = &$node['sigallery_id'];
-				$dataset[$node['parent']]['children'][$id]['parent'] = &$node['parent'];
-			}
-		}
-		$data['parents']=$dataset;
 
 		$data['token'] = $this->session->data['token'];
 
