@@ -187,7 +187,7 @@ class ControllerModuleSigallery extends Controller {
   `path_id` int(11) NOT NULL,
   `level` int(11) NOT NULL,
   PRIMARY KEY (`sigallery_id`,`path_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;")
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
 		$this->db->query("INSERT INTO `" . DB_PREFIX . "sigallery` (`sigallery_id`, `status`, `sort_order`, `parent`, `width`, `height`, `width_popup`, `height_popup`, `autoplay`, `type`, `gallery_image`) VALUES
 (1, 1, 1, 0, 200, 200, 0, 0, 0, 1, '');");
 		$this->db->query("INSERT INTO `" . DB_PREFIX . "sigallery_description` (`sigallery_id`, `language_id`, `title`, `description`, `description_after`, `meta_title`, `meta_description`, `meta_keyword`) VALUES
